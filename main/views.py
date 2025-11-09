@@ -4,13 +4,12 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder, UserProfile
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Max
+from django.db.models import Max, Q
 
 
 # 🔒 Декоратор, який дозволяє доступ лише адміністраторам
 def admin_required(view_func):
     return user_passes_test(lambda u: u.is_staff)(view_func)
-
 
 @admin_required
 def admin_support_list(request):
@@ -81,10 +80,22 @@ def catalog(request):
     return render(request, "catalog.html", {"services": services, "site_settings": site_settings})
 
 
-def service_detail(request, pk):
-    service = get_object_or_404(Service, pk=pk)
+def service_detail(request, service_id):
     site_settings = get_site_settings()
+    service = get_object_or_404(Service, id=service_id)
     return render(request, "service_detail.html", {"service": service, "site_settings": site_settings})
+
+
+def news_list(request):
+    site_settings = get_site_settings()
+    news = News.objects.all().order_by('-date')
+    return render(request, "news.html", {"news": news, "site_settings": site_settings})
+
+
+def news_detail(request, news_id):
+    site_settings = get_site_settings()
+    news_item = get_object_or_404(News, id=news_id)
+    return render(request, "news_detail.html", {"news": news_item, "site_settings": site_settings})
 
 
 def news(request):
@@ -248,6 +259,7 @@ def admin_user_list(request):
     users = User.objects.all().order_by('date_joined')
     return render(request, "admin_user_list.html", {"users": users, "site_settings": site_settings})
 
+
 @admin_required
 def admin_user_detail(request, user_id):
     site_settings = get_site_settings()
@@ -260,3 +272,27 @@ def admin_user_detail(request, user_id):
         "orders": orders,
         "site_settings": site_settings
     })
+
+
+def search(request):
+    site_settings = get_site_settings()
+
+
+    query = request.GET.get('q', '').strip()
+    services = []
+    news = []
+
+    if query:
+        services = Service.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+        news = News.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        )
+
+    context = {
+        "query": query,
+        "services": services,
+        "news": news,
+    }
+    return render(request, "search_results.html", context)

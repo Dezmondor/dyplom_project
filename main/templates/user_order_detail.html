@@ -2,10 +2,10 @@
 {% block title %}Деталі замовлення{% endblock %}
 {% block content %}
 <div class="container py-5">
-  <h2 class="text-warning mb-4">📦 Деталі вашого замовлення</h2>
+  <h2 class="text-warning mb-4">Деталі вашого замовлення</h2>
 
   <div class="card shadow p-4 mb-4">
-    <h5 class="mb-3">💼 Послуга: <span class="text-primary">{{ order.service.title }}</span></h5>
+    <h5 class="mb-3">Послуга: <span class="text-primary">{{ order.service.title }}</span></h5>
     <p><strong>Ваш опис:</strong></p>
     <p>{{ order.description|default:"(Без опису)" }}</p>
 

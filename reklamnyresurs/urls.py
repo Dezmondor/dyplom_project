@@ -8,8 +8,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name="home"),
     path('catalog/', views.catalog, name="catalog"),
-    path('catalog/<int:pk>/', views.service_detail, name="service_detail"),  # 🆕 новий маршрут
-    path('news/', views.news, name="news"),
+    path('catalog/<int:service_id>/', views.service_detail, name='service_detail'),
+    path('news/', views.news_list, name='news'),
+    path('news/<int:news_id>/', views.news_detail, name='news_detail'),
+    path('search/', views.search, name='search'),
     path('contacts/', views.contacts, name="contacts"),
     path('cart/', views.cart, name="cart"),
     path('register/', views.register_view, name='register'),

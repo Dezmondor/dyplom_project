@@ -1,20 +1,14 @@
 {% extends "base.html" %}
 {% block title %}{{ service.title }}{% endblock %}
-
 {% block content %}
-<div class="container py-4">
-
-  <div class="card shadow-lg mb-4">
-    {% if service.image %}
-      <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title }}">
-    {% endif %}
-    <div class="card-body">
-      <h2 class="card-title">{{ service.title }}</h2>
-      <p class="card-text fs-5">{{ service.description }}</p>
+<div class="container py-5">
+  <div class="card shadow p-4">
+    <img src="{{ service.image.url }}" alt="{{ service.title }}" class="img-fluid rounded mb-4" style="max-height: 100%; object-fit: cover;">
+    <h2 class="text-warning mb-3">{{ service.title }}</h2>
+    <p class="lead">{{ service.description }}</p>
+    <div class="text-center mt-4">
+      <a href="{% url 'make_order' %}" class="btn btn-primary">Замовити послугу</a>
     </div>
   </div>
-
-  <a href="{% url 'catalog' %}" class="btn btn-outline-light">← Назад до каталогу</a>
-
 </div>
 {% endblock %}

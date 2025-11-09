@@ -57,10 +57,10 @@
         <img src="https://i.pinimg.com/736x/e7/1f/40/e71f40b5a6aa7ae4c3e3fada3c381a35.jpg" alt="Логотип" width="100">
       {% endif %}
     </a>
-      <form class="d-flex mx-auto">
-      <input class="form-control me-2" type="search" placeholder="Пошук..." aria-label="Search">
-      <button class="btn btn-outline-primary" type="submit">Пошук</button>
-    </form>
+        <form class="d-flex" method="get" action="{% url 'search' %}">
+          <input class="form-control me-2" type="search" name="q" placeholder="Пошук..." value="{{ request.GET.q }}">
+          <button class="btn btn-outline-light" type="submit">🔍</button>
+        </form>
   </div>
 </nav>
 
