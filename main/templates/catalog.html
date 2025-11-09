@@ -1,87 +1,25 @@
 {% extends "base.html" %}
-{% block title %}Каталог{% endblock %}
+{% block title %}Послуги{% endblock %}
 {% block content %}
-
-<style>
-  .card-container {
-  display: flex; /* Размещаем карточки в ряд */
-  justify-content: center; /* Центрируем карточки по горизонтали */
-  flex-wrap: wrap; /* Переносим карточки на новую строку, если не помещаются */
-  gap: 20px; /* Отступ между карточками */
-  margin-bottom: 30px;
-}
-
-.card {
-  display: block; /* Делаем контейнер кликабельным */
-  width: 500px; /* Фиксированная ширина карточки */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden; /* Обрезаем изображение, если оно выходит за границы */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-decoration: none; /* Убираем подчеркивание ссылки */
-  color: inherit; /* Наследуем цвет текста */
-  transition: transform 0.3s ease; /* Плавный переход при наведении */
-}
-
-.card:hover {
-  transform: scale(1.05); /* Расширяем карточку при наведении */
-}
-
-.card-image {
-  width: 100%; /* Изображение на всю ширину карточки */
-  height: 100px; /* Фиксированная высота изображения */
-  object-fit: cover; /* Обрезает изображение, чтобы оно заполняло блок, сохраняя пропорции */
-}
-
-.card-text {
-  padding: 15px;
-}
-
-.card-text h3 {
-  margin-top: 0;
-  font-size: 1.2em;
-}
-
-</style>
-
-<h1>Послуги</h1>
+<h1>Наші послуги</h1>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
+  {% for s in services %}
   <div class="col">
-    <div class="card">
-      <img src="https://i.pinimg.com/1200x/ff/a9/44/ffa9449b97b853fffbf8a54cd78eec64.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Яскраві фасади</h5>
-        <p class="card-text">Ми створюємо сучасні фасадні рішення, які виділяють ваш бізнес серед конкурентів. Яскраві вивіски, об’ємні літери та освітлення роблять будівлю впізнаваною з першого погляду.</p>
+    <a href="{% url 'service_detail' s.id %}" style="text-decoration: none;">
+      <div class="card shadow-sm h-100">
+        {% if s.image %}
+        <img src="{{ s.image.url }}" class="card-img-top" alt="{{ s.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ s.title }}</h5>
+          <p class="card-text text-dark">{{ s.description|truncatewords:25 }}</p>
+        </div>
       </div>
-    </div>
+    </a>
   </div>
-  <div class="col">
-    <div class="card">
-      <img src="https://i.pinimg.com/1200x/ab/df/08/abdf08912a7bf0789f50b130d379d9c2.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Друк будь-яких масштабів</h5>
-        <p class="card-text">Від маленької візитки до гігантського білборда — ми забезпечимо ідеальну якість друку для будь-якого формату. Ваш бренд завжди виглядатиме стильно та професійно.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card">
-      <img src="https://i.pinimg.com/1200x/2f/37/e0/2f37e0b712475e78227aa9cd3619ceea.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Банери</h5>
-        <p class="card-text">Надійні та ефективні банери для реклами подій, акцій та брендів. Стійкі до погодних умов, вони працюють цілодобово, привертаючи увагу нових клієнтів.</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card">
-      <img src="https://i.pinimg.com/1200x/e6/f3/aa/e6f3aa3873496c5691e8f6e084ce6154.jpg" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">Внутрішні роботи</h5>
-        <p class="card-text">Ми допомагаємо створювати атмосферу всередині приміщень: друк постерів, оформлення інтер’єру, брендування офісів і торгових точок. Все для того, щоб ваш простір говорив мовою бізнесу.</p>
-      </div>
-    </div>
-  </div>
+  {% empty %}
+  <p>Поки що немає послуг.</p>
+  {% endfor %}
 </div>
 {% endblock %}

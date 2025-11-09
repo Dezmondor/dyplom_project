@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Контакти{% endblock %}
 {% block content %}
-<h1>Контакти</h1>
-<p>Телефон: +380 (44) 123-45-67</p>
-<p>Email: info@reklamnyresurs.ua</p>
+<h1>Контактна інформація</h1>
+<ul class="list-group">
+  {% for c in contacts %}
+  <li class="list-group-item">
+    <strong>{{ c.name }}</strong><br>
+    📞 {{ c.phone }}<br>
+    ✉️ {{ c.email }}<br>
+    📍 {{ c.address }}
+  </li>
+  {% endfor %}
+</ul>
 {% endblock %}

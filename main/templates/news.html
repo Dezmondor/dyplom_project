@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% block title %}Новини{% endblock %}
 {% block content %}
-<h1>Новини компанії</h1>
-<ul>
-  <li>Знижки на ПВХ-пластик до кінця місяця.</li>
-</ul>
+<h1>Новини</h1>
+{% for n in news_list %}
+<div class="card mb-3 shadow-sm">
+  {% if n.image %}
+  <img src="{{ n.image.url }}" class="card-img-top" alt="{{ n.title }}">
+  {% endif %}
+  <div class="card-body">
+    <h5 class="card-title">{{ n.title }}</h5>
+    <p class="card-text">{{ n.content|truncatewords:30 }}</p>
+    <p class="text-muted">{{ n.date|date:"d.m.Y" }}</p>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

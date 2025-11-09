@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Вхід{% endblock %}
+{% block content %}
+<div class="register-section">
+  <div class="register-card">
+    <h2>Увійти в акаунт</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label>Пароль</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn-register">Увійти</button>
+    </form>
+    <div class="login-link">
+      <p>Ще не маєте акаунта? <a href="{% url 'register' %}">Зареєструватися</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

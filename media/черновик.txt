@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Корзина{% endblock %}
+{% block content %}
+
+<h1>Реєстрація</h1>
+
+ <form action="action_page.php">
+  <div class="container">
+    <p>Будь ласка, заповніть цю форму, щоб створити обліковий запис.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Введіть Email" name="email" required>
+
+    <label for="tel"><b>Номер телефону</b></label>
+    <input type="tel" placeholder="+380..." name="telephone" required>
+
+    <label for="psw"><b>Пароль</b></label>
+    <input type="password" placeholder="Введіть пароль" name="psw" required>
+
+    <label for="psw-repeat"><b>Повторіть пароль</b></label>
+    <input type="password" placeholder="Повторіть пароль" name="psw-repeat" required>
+    <hr>
+
+    <p>Створюючи обліковий запис, ви погоджуєтеся з <a href="#">Terms & Privacy</a>.</p>
+    <button type="submit" class="registerbtn">Зареєструватися</button>
+  </div>
+
+  <div class="container signin">
+    <p>Вже маєте обліковий запис? <a href="#">Увійти</a>.</p>
+  </div>
+</form>
+{% endblock %}

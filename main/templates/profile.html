@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Мій профіль{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-center text-warning mb-4">👤 Вітаємо, {{ request.user.first_name }} {{ request.user.last_name }}</h2>
+
+  <!-- 🔹 Інформація користувача -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Моя інформація</h5>
+      <p><strong>Email:</strong> {{ request.user.email }}</p>
+      <p><strong>Дата створення акаунта:</strong> {{ request.user.date_joined|date:"d.m.Y" }}</p>
+      <a href="{% url 'logout' %}" class="btn btn-outline-danger">Вийти</a>
+    </div>
+  </div>
+
+  <!-- 🔹 Чат підтримки -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="card-title">💬 Чат зі службою підтримки</h5>
+      <div id="chat-box" style="height: 300px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background: #f9f9f9;">
+        {% for msg in chat_messages %}
+          <div class="mb-2 {% if msg.is_admin %}text-end{% endif %}">
+            <div style="display: inline-block; padding: 8px 12px; border-radius: 10px;
+                        background-color: {% if msg.is_admin %}#003366; color: white;{% else %}#e6e6e6;{% endif %}">
+              <small>
+                {% if msg.is_admin %}<strong>Адмін:</strong>{% else %}<strong>Ви:</strong>{% endif %}
+              </small>
+              <div>{{ msg.message }}</div>
+              <small class="text-muted" style="font-size: 0.8em;">{{ msg.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+          </div>
+        {% empty %}
+          <p>Поки що немає повідомлень.</p>
+        {% endfor %}
+      </div>
+
+      <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+</script>
+
+
+
+      <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" name="message" class="form-control" placeholder="Напишіть повідомлення..." required>
+          <button class="btn btn-primary" type="submit">Відправити</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 🔹 Замовлення -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Мої замовлення</h5>
+      {% if orders %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+          {% for o in orders %}
+          <div class="col">
+            <div class="card h-100">
+              {% if o.image %}
+                <img src="{{ o.image.url }}" class="card-img-top" alt="{{ o.title }}">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ o.title }}</h5>
+                <p class="card-text">{{ o.description|truncatewords:20 }}</p>
+                <p class="text-muted">{{ o.created_at|date:"d.m.Y" }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>Немає замовлень.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

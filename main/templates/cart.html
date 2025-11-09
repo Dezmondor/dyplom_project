@@ -1,67 +1,125 @@
 {% extends "base.html" %}
 {% block title %}Реєстрація{% endblock %}
+
 {% block content %}
-
-<h1>Реєстрація</h1>
-
 <style>
-  /* Стили для всей формы */
-  .column-form {
-    display: flex; /* Используем flexbox для расположения элементов в столбец */
-    flex-direction: column; /* Располагаем элементы вертикально */
-    width: 300px; /* Ограничиваем ширину формы */
-    border: 1px solid #ccc; /* Добавляем рамку для наглядности */
-    padding: 15px; /* Отступы внутри формы */
+  /* 🔹 Загальний стиль */
+  .register-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
   }
 
-  }
-  .column-form input[type="text"],
-  .column-form input[type="email"],
-  .column-form textarea {
-    width: 100%; /* Поля ввода занимают всю ширину родителя */
-    padding: 8px; /* Внутренние отступы полей ввода */
-    margin-bottom: 10px; /* Отступ снизу для полей ввода */
-    box-sizing: border-box; /* Учитываем padding и border в ширине */
-  }
-
-  .column-form button {
-    padding: 10px 15px; /* Внутренние отступы кнопки */
-    background-color: #4CAF50; /* Цвет фона кнопки */
-    color: white; /* Цвет текста кнопки */
-    border: none; /* Убираем рамку кнопки */
-    cursor: pointer; /* Курсор в виде указателя при наведении */
-    margin-top: 10px; /* Отступ сверху для кнопки */
+  .register-card {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 420px;
+    padding: 30px 40px;
+    transition: transform 0.3s ease;
   }
 
-  .column-form button:hover {
-    background-color: #45a049; /* Цвет фона кнопки при наведении */
+  .register-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .register-card h2 {
+    text-align: center;
+    color: #003366;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .form-control {
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .btn-register {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #003366, #0074D9);
+    color: #fff;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    border: none;
+  }
+
+  .btn-register:hover {
+    background: linear-gradient(90deg, #00264d, #0056a3);
+  }
+
+  .login-link {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .login-link a {
+    color: #0074D9;
+    text-decoration: none;
+  }
+
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 576px) {
+    .register-card {
+      padding: 25px;
+    }
   }
 </style>
 
- <form class="column-form" action="/submit" method="post">
-  <div class="container">
-    <p>Будь ласка, заповніть цю форму, щоб створити обліковий запис.</p>
-    <hr>
+<div class="register-section">
+  <div class="register-card">
+    <h2>Створення облікового запису</h2>
 
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Введіть Email" name="email" required>
+    <form action="#" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="example@gmail.com" required>
+      </div>
 
-    <label for="tel"><b>Номер телефону</b></label>
-    <input type="tel" placeholder="+380..." name="telephone" required>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Номер телефону</label>
+        <input type="tel" id="phone" name="phone" class="form-control" placeholder="+380..." required>
+      </div>
 
-    <label for="psw"><b>Пароль</b></label>
-    <input type="password" placeholder="Введіть пароль" name="psw" required>
+      <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Введіть пароль" required>
+      </div>
 
-    <label for="psw-repeat"><b>Повторіть пароль</b></label>
-    <input type="password" placeholder="Повторіть пароль" name="psw-repeat" required>
-    <hr>
+      <div class="mb-3">
+        <label for="confirm" class="form-label">Повторіть пароль</label>
+        <input type="password" id="confirm" name="confirm" class="form-control" placeholder="Повторіть пароль" required>
+      </div>
 
-    <p>Створюючи обліковий запис, ви погоджуєтеся з <a href="#">Terms & Privacy</a>.</p>
-    <button type="submit" class="registerbtn">Зареєструватися</button>
+      <button type="submit" class="btn-register">Зареєструватися</button>
+    </form>
+
+    <div class="login-link">
+      <p>Вже маєте обліковий запис? <a href="#">Увійти</a></p>
+    </div>
   </div>
-
-  <div class="container signin">
-    <p>Вже маєте обліковий запис? <a href="#">Увійти</a>.</p>
-  </div>
-</form>
+</div>
 {% endblock %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const card = document.querySelector('.register-card');
+    card.style.opacity = 0;
+    card.style.transform = 'translateY(30px)';
+    setTimeout(() => {
+      card.style.transition = 'all 0.6s ease';
+      card.style.opacity = 1;
+      card.style.transform = 'translateY(0)';
+    }, 100);
+  });
+</script>

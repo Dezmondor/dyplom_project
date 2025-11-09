@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Чат із користувачем{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-warning mb-4">
+    💬 Чат із користувачем: {{ target_user.first_name }} {{ target_user.last_name }}
+  </h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div id="chat-box" style="height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 10px; padding: 10px; background: #f9f9f9;">
+        {% for msg in chat_messages %}
+          <div class="mb-2 {% if msg.is_admin %}text-end{% endif %}">
+            <div style="display: inline-block; padding: 8px 12px; border-radius: 10px;
+                        background-color: {% if msg.is_admin %}#003366; color: white;{% else %}#e6e6e6;{% endif %}">
+              <small>
+                {% if msg.is_admin %}
+                  <strong>Ви (Адмін):</strong>
+                {% else %}
+                  <strong>{{ target_user.first_name|default:target_user.username }}:</strong>
+                {% endif %}
+              </small>
+              <div>{{ msg.message }}</div>
+              <small class="text-muted" style="font-size: 0.8em;">{{ msg.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+          </div>
+        {% empty %}
+          <p>Поки що немає повідомлень.</p>
+        {% endfor %}
+      </div>
+
+      <form method="post" class="mt-3">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" name="message" class="form-control" placeholder="Напишіть відповідь..." required>
+          <button class="btn btn-primary" type="submit">Відправити</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+</script>
+{% endblock %}
