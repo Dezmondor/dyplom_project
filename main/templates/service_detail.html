@@ -5,7 +5,7 @@
   <div class="card shadow p-4">
     <img src="{{ service.image.url }}" alt="{{ service.title }}" class="img-fluid rounded mb-4" style="max-height: 100%; object-fit: cover;">
     <h2 class="text-primary mb-3">{{ service.title }}</h2>
-    <p class="lead">{{ service.description }}</p>
+     <div class="text-body" style="white-space: pre-line; font-size: 20px;">{{ service.description|safe }}</div>
     <div class="text-center mt-4">
       <a href="{% url 'make_order' %}" class="btn btn-primary">Замовити послугу</a>
     </div>
