@@ -43,19 +43,6 @@ class Contact(models.Model):
         verbose_name_plural = "Контакти"
 
 
-class SiteSettings(models.Model):
-    site_name = models.CharField(max_length=200, default="Рекламний ресурс", verbose_name="Назва сайту")
-    logo = models.ImageField(upload_to='logo/', blank=True, null=True, verbose_name="Логотип")
-    background = models.ImageField(upload_to='backgrounds/', blank=True, null=True, verbose_name="Фон (опціонально)")
-
-    def __str__(self):
-        return "Налаштування сайту"
-
-    class Meta:
-        verbose_name = "Налаштування сайту"
-        verbose_name_plural = "Налаштування сайту"
-
-
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders", verbose_name="Користувач")
     title = models.CharField(max_length=200, verbose_name="Назва замовлення")

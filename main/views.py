@@ -1,7 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder, UserProfile
+from .models import Service, News, Contact, Order, SupportChat, ServiceOrder, UserProfile
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max, Q
@@ -13,7 +13,7 @@ def admin_required(view_func):
 
 @admin_required
 def admin_support_list(request):
-    site_settings = get_site_settings()
+
 
     # Отримуємо список користувачів, які писали у підтримку
     users_with_messages = (
@@ -34,12 +34,12 @@ def admin_support_list(request):
             'last_time': last_msg.created_at
         })
 
-    return render(request, "admin_support_list.html", {"user_data": user_data, "site_settings": site_settings})
+    return render(request, "admin_support_list.html", {"user_data": user_data, })
 
 
 @admin_required
 def admin_chat_view(request, user_id):
-    site_settings = get_site_settings()
+
 
     target_user = User.objects.get(pk=user_id)
     chat_messages = SupportChat.objects.filter(user=target_user).order_by('created_at')
@@ -58,65 +58,56 @@ def admin_chat_view(request, user_id):
     return render(request, "admin_chat.html", {
         "target_user": target_user,
         "chat_messages": chat_messages,
-        "site_settings": site_settings
+
     })
-
-
-def get_site_settings():
-    settings = SiteSettings.objects.first()
-    return settings
 
 
 def home(request):
     services = Service.objects.all()[:3]
     news = News.objects.order_by('-date')[:3]
-    site_settings = get_site_settings()
-    return render(request, "index.html", {"services": services, "news": news, "site_settings": site_settings})
+
+    return render(request, "index.html", {"services": services, "news": news, })
 
 
 def catalog(request):
     services = Service.objects.all()
-    site_settings = get_site_settings()
-    return render(request, "catalog.html", {"services": services, "site_settings": site_settings})
+
+    return render(request, "catalog.html", {"services": services, })
 
 
 def service_detail(request, service_id):
-    site_settings = get_site_settings()
+
     service = get_object_or_404(Service, id=service_id)
-    return render(request, "service_detail.html", {"service": service, "site_settings": site_settings})
+    return render(request, "service_detail.html", {"service": service, })
 
 
 def news_list(request):
-    site_settings = get_site_settings()
+
     news = News.objects.all().order_by('-date')
-    return render(request, "news.html", {"news": news, "site_settings": site_settings})
+    return render(request, "news.html", {"news": news, })
 
 
 def news_detail(request, news_id):
-    site_settings = get_site_settings()
     news_item = get_object_or_404(News, id=news_id)
-    return render(request, "news_detail.html", {"news": news_item, "site_settings": site_settings})
+    return render(request, "news_detail.html", {"news": news_item})
 
 
 def news(request):
     news_list = News.objects.order_by('-date')
-    site_settings = get_site_settings()
-    return render(request, "news.html", {"news_list": news_list, "site_settings": site_settings})
+    return render(request, "news.html", {"news_list": news_list})
 
 
 def contacts(request):
     contact = Contact.objects.all()
-    site_settings = get_site_settings()
-    return render(request, "contacts.html", {"contacts": contact, "site_settings": site_settings})
+    return render(request, "contacts.html", {"contacts": contact})
 
 
 def cart(request):
-    site_settings = get_site_settings()
-    return render(request, "cart.html", {"site_settings": site_settings})
+
+    return render(request, "cart.html", {})
 
 
 def register_view(request):
-    site_settings = get_site_settings()
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
@@ -144,11 +135,10 @@ def register_view(request):
         login(request, user)
         return redirect("profile")
 
-    return render(request, "register.html", {"site_settings": site_settings})
+    return render(request, "register.html")
 
 
 def login_view(request):
-    site_settings = get_site_settings()
     if request.method == "POST":
         email = request.POST.get("email")
         username = email.split("@")[0]
@@ -162,12 +152,11 @@ def login_view(request):
             messages.error(request, "Невірний логін або пароль.")
             return redirect("login")
 
-    return render(request, "login.html", {"site_settings": site_settings})
+    return render(request, "login.html")
 
 
 @login_required
 def profile_view(request):
-    site_settings = get_site_settings()
 
     # 🔹 Якщо користувач — адміністратор, показуємо всі замовлення
     if request.user.is_staff:
@@ -193,7 +182,6 @@ def profile_view(request):
     return render(request, "profile.html", {
         "orders": orders,
         "chat_messages": chat_messages,
-        "site_settings": site_settings,
     })
 
 
@@ -203,11 +191,10 @@ def logout_view(request):
 
 
 def make_order(request):
-    site_settings = get_site_settings()
 
     # 🔹 Якщо користувач не залогінений — показуємо сторінку з повідомленням
     if not request.user.is_authenticated:
-        return render(request, "order_guest.html", {"site_settings": site_settings})
+        return render(request, "order_guest.html")
 
     services = Service.objects.all()
 
@@ -226,13 +213,11 @@ def make_order(request):
 
     return render(request, "order_service.html", {
         "services": services,
-        "site_settings": site_settings
     })
 
 
 @admin_required
 def admin_order_detail(request, order_id):
-    site_settings = get_site_settings()
 
     order = get_object_or_404(ServiceOrder, id=order_id)
     user = order.user
@@ -240,29 +225,25 @@ def admin_order_detail(request, order_id):
     return render(request, "admin_order_detail.html", {
         "order": order,
         "user_info": user,
-        "site_settings": site_settings
     })
 
 
 @login_required
 def user_order_detail(request, order_id):
-    site_settings = get_site_settings()
 
     order = get_object_or_404(ServiceOrder, id=order_id, user=request.user)
-    return render(request, "user_order_detail.html", {"order": order, "site_settings": site_settings})
+    return render(request, "user_order_detail.html", {"order": order})
 
 
 @admin_required
 def admin_user_list(request):
-    site_settings = get_site_settings()
 
     users = User.objects.all().order_by('date_joined')
-    return render(request, "admin_user_list.html", {"users": users, "site_settings": site_settings})
+    return render(request, "admin_user_list.html", {"users": users})
 
 
 @admin_required
 def admin_user_detail(request, user_id):
-    site_settings = get_site_settings()
 
     user_info = get_object_or_404(User, id=user_id)
     orders = ServiceOrder.objects.filter(user=user_info).select_related('service').order_by('-created_at')
@@ -270,12 +251,11 @@ def admin_user_detail(request, user_id):
     return render(request, "admin_user_detail.html", {
         "user_info": user_info,
         "orders": orders,
-        "site_settings": site_settings
     })
 
 
 def search(request):
-    site_settings = get_site_settings()
+
 
 
     query = request.GET.get('q', '').strip()

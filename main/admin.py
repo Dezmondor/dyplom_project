@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder, UserProfile
+from .models import Service, News, Contact, Order, SupportChat, ServiceOrder, UserProfile
 
 admin.site.register(UserProfile)
 
@@ -17,10 +17,6 @@ class NewsAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone', 'email')
-
-@admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
-    list_display = ('site_name',)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

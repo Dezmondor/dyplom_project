@@ -51,11 +51,8 @@
 
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">
-      {% if site_settings and site_settings.logo %}
-        <img src="{{ site_settings.logo.url }}" alt="Логотип" width="100">
-      {% else %}
-        <img src="https://i.pinimg.com/736x/e7/1f/40/e71f40b5a6aa7ae4c3e3fada3c381a35.jpg" alt="Логотип" width="100">
-      {% endif %}
+        {% load static %}
+        <img src="{% static 'img/logo.png' %}" alt="Рекламний ресурс" height="100">
     </a>
         <form class="d-flex" method="get" action="{% url 'search' %}">
           <input class="form-control me-2" type="search" name="q" placeholder="Пошук..." value="{{ request.GET.q }}">
