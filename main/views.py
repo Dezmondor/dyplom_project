@@ -157,27 +157,31 @@ def login_view(request):
 def profile_view(request):
     site_settings = get_site_settings()
 
-    orders = Order.objects.filter(user=request.user)
+    # 🔹 Якщо користувач — адміністратор, показуємо всі замовлення
+    if request.user.is_staff:
+        orders = ServiceOrder.objects.select_related('user', 'service').order_by('-created_at')
+    else:
+        orders = ServiceOrder.objects.filter(user=request.user).select_related('service').order_by('-created_at')
+
     chat_messages = SupportChat.objects.filter(user=request.user).order_by('created_at')
 
-    # 🔹 Якщо користувач надсилає повідомлення
-    if request.method == "POST":
+    # 🔹 Відправлення повідомлення у чат
+    if request.method == "POST" and "message" in request.POST:
         text = request.POST.get("message", "").strip()
         if text:
             SupportChat.objects.create(
                 user=request.user,
                 sender=request.user,
                 message=text,
-                is_admin=False
+                is_admin=request.user.is_staff
             )
-            messages.success(request, "Повідомлення надіслано службі підтримки.")
+            messages.success(request, "Повідомлення відправлено.")
         return redirect("profile")
 
-    # 🔹 Якщо просто GET-запит — відображаємо сторінку
     return render(request, "profile.html", {
         "orders": orders,
         "chat_messages": chat_messages,
-        "site_settings": site_settings
+        "site_settings": site_settings,
     })
 
 
