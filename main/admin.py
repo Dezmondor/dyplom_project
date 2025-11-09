@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder
+from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder, UserProfile
+
+admin.site.register(UserProfile)
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):

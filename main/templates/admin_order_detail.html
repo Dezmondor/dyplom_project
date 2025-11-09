@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Інформація про замовлення{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-warning mb-4">📋 Деталі замовлення</h2>
+
+  <div class="card shadow p-4 mb-4">
+    <h5 class="mb-3">💼 Послуга: <span class="text-primary">{{ order.service.title }}</span></h5>
+    <p><strong>Опис замовлення:</strong></p>
+    <p>{{ order.description|default:"(Без опису)" }}</p>
+
+    <hr>
+    <p><strong>Дата створення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+    <p><strong>Статус:</strong>
+      <span class="badge {% if order.status == 'Нове' %}bg-warning text-dark{% elif order.status == 'В роботі' %}bg-info{% else %}bg-success{% endif %}">
+        {{ order.status }}
+      </span>
+    </p>
+  </div>
+
+  <div class="card shadow p-4">
+    <h5 class="mb-3">👤 Інформація про користувача</h5>
+    <p><strong>Ім’я:</strong> {{ user_info.first_name }} {{ user_info.last_name }}</p>
+    <p><strong>Email:</strong> {{ user_info.email }}</p>
+    {% if user_info.profile.phone %}
+      <p><strong>Телефон:</strong> {{ user_info.profile.phone }}</p>
+    {% endif %}
+    <p><strong>Дата реєстрації:</strong> {{ user_info.date_joined|date:"d.m.Y" }}</p>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'profile' %}" class="btn btn-secondary">← Назад до профілю</a>
+  </div>
+</div>
+{% endblock %}

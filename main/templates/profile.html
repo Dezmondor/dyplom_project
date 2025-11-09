@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <th>Опис</th>
               <th>Дата</th>
               <th>Статус</th>
+              <th>Дії</th>
             </tr>
           </thead>
           <tbody>
@@ -90,6 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   <span class="badge {% if o.status == 'Нове' %}bg-warning text-dark{% elif o.status == 'В роботі' %}bg-info{% else %}bg-success{% endif %}">
                     {{ o.status }}
                   </span>
+                </td>
+                <td>
+                  <a href="{% url 'admin_order_detail' o.id %}" class="btn btn-sm btn-outline-primary">
+                    Переглянути
+                  </a>
                 </td>
               </tr>
             {% endfor %}

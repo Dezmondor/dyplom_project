@@ -19,6 +19,7 @@ urlpatterns = [
     path('admin-chat/<int:user_id>/', views.admin_chat_view, name='admin_chat'),
     path('admin-support/', views.admin_support_list, name='admin_support_list'),
     path('order/', views.make_order, name='make_order'),
+    path('admin-order/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
 ]
 
 

@@ -1,7 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder
+from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder, UserProfile
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max
@@ -128,6 +128,7 @@ def register_view(request):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
+        UserProfile.objects.create(user=user, phone=phone)
 
         login(request, user)
         return redirect("profile")
@@ -212,4 +213,21 @@ def make_order(request):
         messages.success(request, "Ваше замовлення успішно відправлено!")
         return redirect("profile")
 
-    return render(request, "order_service.html", {"services": services, "site_settings": site_settings})
+    return render(request, "order_service.html", {
+        "services": services,
+        "site_settings": site_settings
+    })
+
+
+@admin_required
+def admin_order_detail(request, order_id):
+    site_settings = get_site_settings()
+
+    order = get_object_or_404(ServiceOrder, id=order_id)
+    user = order.user
+
+    return render(request, "admin_order_detail.html", {
+        "order": order,
+        "user_info": user,
+        "site_settings": site_settings
+    })

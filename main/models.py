@@ -100,3 +100,11 @@ class ServiceOrder(models.Model):
     class Meta:
         verbose_name = "Замовлення послуги"
         verbose_name_plural = "Замовлення послуг"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Телефон")
+
+    def __str__(self):
+        return self.user.username
