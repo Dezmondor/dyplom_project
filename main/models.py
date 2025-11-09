@@ -64,6 +64,7 @@ class SupportChat(models.Model):
     message = models.TextField(verbose_name="Повідомлення")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата")
     is_admin = models.BooleanField(default=False, verbose_name="Від адміністратора")
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Повідомлення від {self.sender.username} → {self.user.username}"

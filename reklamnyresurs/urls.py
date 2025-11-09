@@ -25,6 +25,7 @@ urlpatterns = [
     path('order-detail/<int:order_id>/', views.user_order_detail, name='user_order_detail'),
     path('admin-users/', views.admin_user_list, name='admin_user_list'),
     path('admin-user/<int:user_id>/', views.admin_user_detail, name='admin_user_detail'),
+    path('get_unread_count/', views.get_unread_count, name='get_unread_count'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

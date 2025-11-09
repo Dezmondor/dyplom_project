@@ -24,11 +24,6 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('created_at', 'user')
     search_fields = ('title', 'user__username')
 
-@admin.register(SupportChat)
-class SupportChatAdmin(admin.ModelAdmin):
-    list_display = ('user', 'sender', 'created_at', 'is_admin')
-    list_filter = ('is_admin', 'created_at')
-    search_fields = ('user__username', 'sender__username', 'message')
 
 @admin.register(ServiceOrder)
 class ServiceOrderAdmin(admin.ModelAdmin):

@@ -5,16 +5,16 @@ from .models import Service, News, Contact, Order, SupportChat, ServiceOrder, Us
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max, Q
+from django.http import JsonResponse
 
 
 # 🔒 Декоратор, який дозволяє доступ лише адміністраторам
 def admin_required(view_func):
     return user_passes_test(lambda u: u.is_staff)(view_func)
 
+
 @admin_required
 def admin_support_list(request):
-
-
     # Отримуємо список користувачів, які писали у підтримку
     users_with_messages = (
         SupportChat.objects
@@ -38,11 +38,17 @@ def admin_support_list(request):
 
 
 @admin_required
+def get_unread_count(request):
+    """Повертає кількість непрочитаних повідомлень для AJAX-запиту"""
+    count = SupportChat.objects.filter(is_read=False).count()
+    return JsonResponse({'count': count})
+
+
+@admin_required
 def admin_chat_view(request, user_id):
-
-
     target_user = User.objects.get(pk=user_id)
     chat_messages = SupportChat.objects.filter(user=target_user).order_by('created_at')
+    SupportChat.objects.filter(is_read=False).update(is_read=True)
 
     if request.method == "POST":
         text = request.POST.get("message", "").strip()
@@ -76,13 +82,11 @@ def catalog(request):
 
 
 def service_detail(request, service_id):
-
     service = get_object_or_404(Service, id=service_id)
     return render(request, "service_detail.html", {"service": service, })
 
 
 def news_list(request):
-
     news = News.objects.all().order_by('-date')
     return render(request, "news.html", {"news": news, })
 
@@ -103,7 +107,6 @@ def contacts(request):
 
 
 def cart(request):
-
     return render(request, "cart.html", {})
 
 
@@ -157,7 +160,6 @@ def login_view(request):
 
 @login_required
 def profile_view(request):
-
     # 🔹 Якщо користувач — адміністратор, показуємо всі замовлення
     if request.user.is_staff:
         orders = ServiceOrder.objects.select_related('user', 'service').order_by('-created_at')
@@ -191,7 +193,6 @@ def logout_view(request):
 
 
 def make_order(request):
-
     # 🔹 Якщо користувач не залогінений — показуємо сторінку з повідомленням
     if not request.user.is_authenticated:
         return render(request, "order_guest.html")
@@ -218,7 +219,6 @@ def make_order(request):
 
 @admin_required
 def admin_order_detail(request, order_id):
-
     order = get_object_or_404(ServiceOrder, id=order_id)
     user = order.user
 
@@ -230,21 +230,18 @@ def admin_order_detail(request, order_id):
 
 @login_required
 def user_order_detail(request, order_id):
-
     order = get_object_or_404(ServiceOrder, id=order_id, user=request.user)
     return render(request, "user_order_detail.html", {"order": order})
 
 
 @admin_required
 def admin_user_list(request):
-
     users = User.objects.all().order_by('date_joined')
     return render(request, "admin_user_list.html", {"users": users})
 
 
 @admin_required
 def admin_user_detail(request, user_id):
-
     user_info = get_object_or_404(User, id=user_id)
     orders = ServiceOrder.objects.filter(user=user_info).select_related('service').order_by('-created_at')
 
@@ -255,9 +252,6 @@ def admin_user_detail(request, user_id):
 
 
 def search(request):
-
-
-
     query = request.GET.get('q', '').strip()
     services = []
     news = []
