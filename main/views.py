@@ -186,9 +186,13 @@ def logout_view(request):
     return redirect("home")
 
 
-@login_required
 def make_order(request):
     site_settings = get_site_settings()
+
+    # 🔹 Якщо користувач не залогінений — показуємо сторінку з повідомленням
+    if not request.user.is_authenticated:
+        return render(request, "order_guest.html", {"site_settings": site_settings})
+
     services = Service.objects.all()
 
     if request.method == "POST":
