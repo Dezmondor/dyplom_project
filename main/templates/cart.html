@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Реєстрація{% endblock %}
+{% block content %}
+
+<h1>Реєстрація</h1>
+
+<style>
+  /* Стили для всей формы */
+  .column-form {
+    display: flex; /* Используем flexbox для расположения элементов в столбец */
+    flex-direction: column; /* Располагаем элементы вертикально */
+    width: 300px; /* Ограничиваем ширину формы */
+    border: 1px solid #ccc; /* Добавляем рамку для наглядности */
+    padding: 15px; /* Отступы внутри формы */
+  }
+
+  }
+  .column-form input[type="text"],
+  .column-form input[type="email"],
+  .column-form textarea {
+    width: 100%; /* Поля ввода занимают всю ширину родителя */
+    padding: 8px; /* Внутренние отступы полей ввода */
+    margin-bottom: 10px; /* Отступ снизу для полей ввода */
+    box-sizing: border-box; /* Учитываем padding и border в ширине */
+  }
+
+  .column-form button {
+    padding: 10px 15px; /* Внутренние отступы кнопки */
+    background-color: #4CAF50; /* Цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    border: none; /* Убираем рамку кнопки */
+    cursor: pointer; /* Курсор в виде указателя при наведении */
+    margin-top: 10px; /* Отступ сверху для кнопки */
+  }
+
+  .column-form button:hover {
+    background-color: #45a049; /* Цвет фона кнопки при наведении */
+  }
+</style>
+
+ <form class="column-form" action="/submit" method="post">
+  <div class="container">
+    <p>Будь ласка, заповніть цю форму, щоб створити обліковий запис.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" placeholder="Введіть Email" name="email" required>
+
+    <label for="tel"><b>Номер телефону</b></label>
+    <input type="tel" placeholder="+380..." name="telephone" required>
+
+    <label for="psw"><b>Пароль</b></label>
+    <input type="password" placeholder="Введіть пароль" name="psw" required>
+
+    <label for="psw-repeat"><b>Повторіть пароль</b></label>
+    <input type="password" placeholder="Повторіть пароль" name="psw-repeat" required>
+    <hr>
+
+    <p>Створюючи обліковий запис, ви погоджуєтеся з <a href="#">Terms & Privacy</a>.</p>
+    <button type="submit" class="registerbtn">Зареєструватися</button>
+  </div>
+
+  <div class="container signin">
+    <p>Вже маєте обліковий запис? <a href="#">Увійти</a>.</p>
+  </div>
+</form>
+{% endblock %}
