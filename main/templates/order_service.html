@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Замовлення послуги{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-center text-warning mb-4">🛠 Замовлення послуги</h2>
+
+  <form method="post" class="card shadow-lg p-4 mx-auto" style="max-width: 600px;">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="service" class="form-label fw-bold">Оберіть послугу:</label>
+      <select name="service_id" id="service" class="form-select" required>
+        <option value="" disabled selected>-- Оберіть послугу --</option>
+        {% for s in services %}
+          <option value="{{ s.id }}">{{ s.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label fw-bold">Додаткова інформація:</label>
+      <textarea name="description" id="description" rows="5" class="form-control" placeholder="Опишіть, що саме вас цікавить..."></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Надіслати замовлення</button>
+  </form>
+</div>
+{% endblock %}

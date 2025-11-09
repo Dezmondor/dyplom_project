@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 
 class Service(models.Model):
     title = models.CharField(max_length=200, verbose_name="Назва послуги")
@@ -84,3 +85,18 @@ class SupportChat(models.Model):
         verbose_name = "Повідомлення чату"
         verbose_name_plural = "Чат підтримки"
         ordering = ['created_at']
+
+
+class ServiceOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="service_orders", verbose_name="Користувач")
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Послуга")
+    description = models.TextField(verbose_name="Додаткова інформація", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата замовлення")
+    status = models.CharField(max_length=50, default="Нове", verbose_name="Статус")
+
+    def __str__(self):
+        return f"{self.user.username} → {self.service.title}"
+
+    class Meta:
+        verbose_name = "Замовлення послуги"
+        verbose_name_plural = "Замовлення послуг"

@@ -65,6 +65,7 @@
       <li class="nav-item"><a class="nav-link" href="{% url 'news' %}">Новини</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'contacts' %}">Контакти</a></li>
         {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'make_order' %}">Замовити</a></li>
             <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Профіль</a></li>
         {% else %}
             <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Реєстрація</a></li>

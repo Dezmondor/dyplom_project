@@ -1,7 +1,7 @@
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat
+from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Max
@@ -184,3 +184,24 @@ def profile_view(request):
 def logout_view(request):
     logout(request)
     return redirect("home")
+
+
+@login_required
+def make_order(request):
+    site_settings = get_site_settings()
+    services = Service.objects.all()
+
+    if request.method == "POST":
+        service_id = request.POST.get("service_id")
+        description = request.POST.get("description")
+        service = Service.objects.get(id=service_id)
+
+        ServiceOrder.objects.create(
+            user=request.user,
+            service=service,
+            description=description
+        )
+        messages.success(request, "Ваше замовлення успішно відправлено!")
+        return redirect("profile")
+
+    return render(request, "order_service.html", {"services": services, "site_settings": site_settings})

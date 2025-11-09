@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, News, Contact, SiteSettings, Order, SupportChat
+from .models import Service, News, Contact, SiteSettings, Order, SupportChat, ServiceOrder
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
@@ -31,3 +31,9 @@ class SupportChatAdmin(admin.ModelAdmin):
     list_display = ('user', 'sender', 'created_at', 'is_admin')
     list_filter = ('is_admin', 'created_at')
     search_fields = ('user__username', 'sender__username', 'message')
+
+@admin.register(ServiceOrder)
+class ServiceOrderAdmin(admin.ModelAdmin):
+    list_display = ('service', 'user', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('user__username', 'service__title', 'description')

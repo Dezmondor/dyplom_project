@@ -18,6 +18,7 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('admin-chat/<int:user_id>/', views.admin_chat_view, name='admin_chat'),
     path('admin-support/', views.admin_support_list, name='admin_support_list'),
+    path('order/', views.make_order, name='make_order'),
 ]
 
 

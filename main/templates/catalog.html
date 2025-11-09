@@ -7,6 +7,7 @@
   {% for s in services %}
   <div class="col">
     <a href="{% url 'service_detail' s.id %}" style="text-decoration: none;">
+      <a href="{% url 'make_order' %}" class="btn btn-outline-primary mt-2">Замовити цю послугу</a>
       <div class="card shadow-sm h-100">
         {% if s.image %}
         <img src="{{ s.image.url }}" class="card-img-top" alt="{{ s.title }}">
