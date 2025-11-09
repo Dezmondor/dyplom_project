@@ -20,6 +20,9 @@ urlpatterns = [
     path('admin-support/', views.admin_support_list, name='admin_support_list'),
     path('order/', views.make_order, name='make_order'),
     path('admin-order/<int:order_id>/', views.admin_order_detail, name='admin_order_detail'),
+    path('order-detail/<int:order_id>/', views.user_order_detail, name='user_order_detail'),
+    path('admin-users/', views.admin_user_list, name='admin_user_list'),
+    path('admin-user/<int:user_id>/', views.admin_user_detail, name='admin_user_detail'),
 ]
 
 

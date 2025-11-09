@@ -231,3 +231,32 @@ def admin_order_detail(request, order_id):
         "user_info": user,
         "site_settings": site_settings
     })
+
+
+@login_required
+def user_order_detail(request, order_id):
+    site_settings = get_site_settings()
+
+    order = get_object_or_404(ServiceOrder, id=order_id, user=request.user)
+    return render(request, "user_order_detail.html", {"order": order, "site_settings": site_settings})
+
+
+@admin_required
+def admin_user_list(request):
+    site_settings = get_site_settings()
+
+    users = User.objects.all().order_by('date_joined')
+    return render(request, "admin_user_list.html", {"users": users, "site_settings": site_settings})
+
+@admin_required
+def admin_user_detail(request, user_id):
+    site_settings = get_site_settings()
+
+    user_info = get_object_or_404(User, id=user_id)
+    orders = ServiceOrder.objects.filter(user=user_info).select_related('service').order_by('-created_at')
+
+    return render(request, "admin_user_detail.html", {
+        "user_info": user_info,
+        "orders": orders,
+        "site_settings": site_settings
+    })

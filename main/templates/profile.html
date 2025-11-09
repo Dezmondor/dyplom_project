@@ -93,9 +93,15 @@ document.addEventListener("DOMContentLoaded", () => {
                   </span>
                 </td>
                 <td>
-                  <a href="{% url 'admin_order_detail' o.id %}" class="btn btn-sm btn-outline-primary">
-                    Переглянути
-                  </a>
+                  {% if request.user.is_staff %}
+                    <a href="{% url 'admin_order_detail' o.id %}" class="btn btn-sm btn-outline-primary">
+                      Переглянути
+                    </a>
+                  {% else %}
+                    <a href="{% url 'user_order_detail' o.id %}" class="btn btn-sm btn-outline-secondary">
+                      Детальніше
+                    </a>
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}

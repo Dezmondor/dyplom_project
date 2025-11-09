@@ -42,6 +42,13 @@
   </a>
 {% endif %}
 
+    {% if request.user.is_staff %}
+  <a href="{% url 'admin_user_list' %}" class="btn btn-outline-info ms-3">
+    👥 Користувачі
+  </a>
+{% endif %}
+
+
   <div class="container">
     <a class="navbar-brand" href="{% url 'home' %}">
       {% if site_settings and site_settings.logo %}

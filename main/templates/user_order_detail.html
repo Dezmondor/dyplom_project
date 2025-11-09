@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Деталі замовлення{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-warning mb-4">📦 Деталі вашого замовлення</h2>
+
+  <div class="card shadow p-4 mb-4">
+    <h5 class="mb-3">💼 Послуга: <span class="text-primary">{{ order.service.title }}</span></h5>
+    <p><strong>Ваш опис:</strong></p>
+    <p>{{ order.description|default:"(Без опису)" }}</p>
+
+    <hr>
+    <p><strong>Дата створення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+    <p><strong>Статус:</strong>
+      <span class="badge {% if order.status == 'Нове' %}bg-warning text-dark{% elif order.status == 'В роботі' %}bg-info{% else %}bg-success{% endif %}">
+        {{ order.status }}
+      </span>
+    </p>
+  </div>
+
+  <div class="text-center">
+    <a href="{% url 'profile' %}" class="btn btn-secondary">← Повернутись до профілю</a>
+  </div>
+</div>
+{% endblock %}

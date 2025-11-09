@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Список користувачів{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h2 class="text-warning mb-4">👥 Список користувачів</h2>
+
+  {% if users %}
+    <div class="list-group shadow-sm">
+      {% for user in users %}
+        <a href="{% url 'admin_user_detail' user.id %}" 
+           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h6>
+            <p class="mb-0 text-muted">{{ user.email }}</p>
+          </div>
+          <small class="text-secondary">{{ user.date_joined|date:"d.m.Y" }}</small>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Поки що немає зареєстрованих користувачів.</p>
+  {% endif %}
+</div>
+{% endblock %}
