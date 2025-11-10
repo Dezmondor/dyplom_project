@@ -1,0 +1,14 @@
+aiofiles
+asgiref
+crispy-bootstrap5
+distlib
+Django
+django-crispy-forms
+easy-thumbnails
+emoji
+packaging
+pillow
+setuptools
+sqlparse
+tzdata
+wheel
